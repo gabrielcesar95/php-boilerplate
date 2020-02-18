@@ -8,8 +8,9 @@
 		</p>
 	</header>
 
+	<div class="ajax_response"></div>
 	<form action="<?= url("admin/entrar"); ?>" method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center">
-		<?= flash(); ?>
+
 		<?= csrf_input(); ?>
 
 		<div class="form-group col-6 text-left">

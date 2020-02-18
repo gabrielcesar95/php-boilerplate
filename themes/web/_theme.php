@@ -51,6 +51,8 @@ use Source\Models\Auth;
 	</header>
 
 	<main role="main" class="inner cover">
+		<?= flash(); ?>
+
 		<?= $v->section("content"); ?>
 	</main>
 

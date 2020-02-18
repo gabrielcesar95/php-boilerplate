@@ -23,8 +23,6 @@ $route->get("/", "Web:home");
 
 //auth
 $route->group(null);
-//$route->get("/entrar", "Source\App\Admin\Login:login");
-//$route->post("/entrar", "Source\App\Admin\Login:login");
 $route->get("/cadastrar", "Web:register");
 $route->post("/cadastrar", "Web:register");
 

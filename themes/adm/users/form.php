@@ -29,14 +29,17 @@
 					</div>
 					<div class="form-group col-md-4">
 						<label for="photo">Foto:</label>
-						<input type="file" name="photo" id="photo" class="form-control" />
+						<input type="file" name="photo" id="photo" class="form-control" accept="image/*" />
 					</div>
+				</div>
 
+				<div class="btn-toolbar">
+					<button type="submit" class="btn btn-primary ml-auto">Salvar</button>
 				</div>
 			</form>
 		<?php else: ?>
 			<header class="dash_content_app_header">
-				<h2 class="icon-user"><?= $user->fullName(); ?></h2>
+				<h2 class="icon-user"><?= $user->name; ?></h2>
 			</header>
 
 			<div class="dash_content_app_box">

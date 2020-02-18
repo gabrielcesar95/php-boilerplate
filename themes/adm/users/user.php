@@ -79,7 +79,7 @@
         </div>
     <?php else: ?>
         <header class="dash_content_app_header">
-            <h2 class="icon-user"><?= $user->fullName(); ?></h2>
+            <h2 class="icon-user"><?= $user->name; ?></h2>
         </header>
 
         <div class="dash_content_app_box">

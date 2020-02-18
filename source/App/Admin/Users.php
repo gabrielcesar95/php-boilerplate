@@ -84,34 +84,20 @@ class Users extends Admin
 
 	public function store(?array $data): void
 	{
-
-	}
-
-	/**
-	 * @param array|null $data
-	 * @throws \Exception
-	 */
-	public function user(?array $data): void
-	{
-		//create
-		if (!empty($data["action"]) && $data["action"] == "create") {
+		if (isset($data) && $data) {
 			$data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
-
+			
 			$userCreate = new User();
-			$userCreate->first_name = $data["first_name"];
-			$userCreate->last_name = $data["last_name"];
+			$userCreate->name = $data["name"];
 			$userCreate->email = $data["email"];
 			$userCreate->password = $data["password"];
-			$userCreate->genre = $data["genre"];
-			$userCreate->datebirth = date_fmt_back($data["datebirth"]);
-			$userCreate->document = preg_replace("/[^0-9]/", "", $data["document"]);
-			$userCreate->status = $data["status"];
+			$userCreate->birth_date = date_fmt_back($data["birth_date"]);
 
 			//upload photo
 			if (!empty($_FILES["photo"])) {
 				$files = $_FILES["photo"];
 				$upload = new Upload();
-				$image = $upload->image($files, $userCreate->fullName(), 600);
+				$image = $upload->image($files, $userCreate->name, 600);
 
 				if (!$image) {
 					$json["message"] = $upload->message()->render();
@@ -129,12 +115,19 @@ class Users extends Admin
 			}
 
 			$this->message->success("Usuário cadastrado com sucesso...")->flash();
-			$json["redirect"] = url("/admin/usuarios/user/{$userCreate->id}");
+			$json["redirect"] = url("/admin/usuarios");
 
 			echo json_encode($json);
 			return;
 		}
+	}
 
+	/**
+	 * @param array|null $data
+	 * @throws \Exception
+	 */
+	public function user(?array $data): void
+	{
 		//update
 		if (!empty($data["action"]) && $data["action"] == "update") {
 			$data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
@@ -164,7 +157,7 @@ class Users extends Admin
 
 				$files = $_FILES["photo"];
 				$upload = new Upload();
-				$image = $upload->image($files, $userUpdate->fullName(), 600);
+				$image = $upload->image($files, $userUpdate->name, 600);
 
 				if (!$image) {
 					$json["message"] = $upload->message()->render();
@@ -217,7 +210,7 @@ class Users extends Admin
 		}
 
 		$head = $this->seo->render(
-			CONF_SITE_NAME . " | " . ($userEdit ? "Perfil de {$userEdit->fullName()}" : "Novo Usuário"),
+			CONF_SITE_NAME . " | " . ($userEdit ? "Perfil de {$userEdit->name}" : "Novo Usuário"),
 			CONF_SITE_DESC,
 			url("/admin"),
 			url("/admin/assets/images/image.jpg"),

@@ -41,7 +41,7 @@
 
 	<div id="layoutSidenav_content">
 		<main>
-			<?= flash(); ?>
+			<div class="ajax_response"><?= flash(); ?></div>
 
 			<?= $v->section("content"); ?>
 		</main>
