@@ -10,22 +10,10 @@
 	<link rel="stylesheet" href="<?= theme("/assets/css/style.css", CONF_VIEW_ADMIN); ?>" />
 
 	<link rel="icon" type="image/png" href="<?= theme("/assets/images/favicon.ico", CONF_VIEW_ADMIN); ?>" />
+
+	<script src="<?= url("/shared/scripts/jquery.min.js"); ?>"></script>
+
 </head>
-
-<?php
-//$nav = function ($icon, $href, $title) use ($app) {
-//	$active = (explode("/", $app)[0] == explode("/", $href)[0] ? "active" : null);
-//	$url = url("/admin/{$href}");
-//	return "<li class=\"dash_sidebar_nav_li {$active}\"><a class=\"icon-{$icon}\" href=\"{$url}\">{$title}</a></li>";
-//};
-//
-//echo $nav("home", "dash", "Dashboard");
-//echo $nav("user", "users/home", "Usuários");
-//echo "<li class=\"dash_sidebar_nav_li\"><a class=\"icon-link\" href=\"" . url() . " \" target=\"_blank\">Ver site</a></li>";
-//
-//echo $nav("sign-out on_mobile", "logoff", "Sair");
-?>
-
 
 <body class="sb-nav-fixed">
 
@@ -53,23 +41,19 @@
 
 	<div id="layoutSidenav_content">
 		<main>
-			 <?= $v->section("content"); ?>
+			<?= flash(); ?>
+
+			<?= $v->section("content"); ?>
 		</main>
 		<footer class="py-4 bg-light mt-auto">
 			<div class="container-fluid">
 				<div class="d-flex align-items-center justify-content-between small">
-					<div class="text-muted">Copyright &copy; Your Website 2019</div>
-					<div>
-						<a href="#">Privacy Policy</a>
-						&middot;
-						<a href="#">Terms &amp; Conditions</a>
-					</div>
+					<div class="text-muted">Copyright &copy; <?= CONF_SITE_NAME; ?>, 2020. Todos os direitos reservados</div>
 				</div>
 			</div>
 		</footer>
 	</div>
 </div>
-<script src="<?= url("/shared/scripts/jquery.min.js"); ?>"></script>
 <script src="<?= url("/shared/scripts/bootstrap.bundle.js"); ?>"></script>
 <script src="<?= url("/shared/scripts/jquery.form.js"); ?>"></script>
 <script src="<?= url("/shared/scripts/jquery-ui.js"); ?>"></script>

@@ -9,7 +9,7 @@
 	</header>
 
 	<form action="<?= url("admin/entrar"); ?>" method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center">
-		<div class="ajax_response"><?= flash(); ?></div>
+		<?= flash(); ?>
 		<?= csrf_input(); ?>
 
 		<div class="form-group col-6 text-left">

@@ -48,13 +48,14 @@ $route->post("/dash/home", "Dash:home");
 $route->get("/logoff", "Dash:logoff");
 
 //users
-$route->get("/users/home", "Users:home");
-$route->post("/users/home", "Users:home");
-$route->get("/users/home/{search}/{page}", "Users:home");
-$route->get("/users/user", "Users:user");
-$route->post("/users/user", "Users:user");
-$route->get("/users/user/{user_id}", "Users:user");
-$route->post("/users/user/{user_id}", "Users:user");
+$route->get("/usuarios", "Users:home");
+$route->post("/usuarios", "Users:home");
+$route->get("/usuarios/{search}/{page}", "Users:home");
+$route->get("/usuarios/novo", "Users:create");
+$route->post("/usuarios/novo", "Users:store");
+$route->get("/usuarios/usuario/{user_id}", "Users:edit");
+$route->put("/usuarios/usuario/{user_id}", "Users:update");
+$route->get("/usuarios/deletar/{user_id}", "Users:delete");
 
 //END ADMIN
 $route->namespace("Source\App");

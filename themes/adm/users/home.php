@@ -1,42 +1,68 @@
 <?php $v->layout("_admin"); ?>
-<?php $v->insert("users/sidebar.php"); ?>
 
-<section class="dash_content_app">
-	<header class="dash_content_app_header">
-		<h2 class="icon-user">Usuários</h2>
-		<form action="<?= url("/admin/users/home"); ?>" class="app_search_form">
-			<input type="text" name="s" value="<?= $search; ?>" placeholder="Pesquisar Usuário:">
-			<button class="icon-search icon-notext"></button>
-		</form>
-	</header>
+<div class="container">
+	<h1 class="mt-4">Usuários</h1>
 
-	<div class="dash_content_app_box">
-		<section>
-			<div class="app_users_home">
-				<?php foreach ($users as $user):
-					$userPhoto = ($user->photo() ? image($user->photo, 300, 300) :
-						theme("/assets/images/avatar.jpg", CONF_VIEW_ADMIN));
-					?>
-					<article class="user radius">
-						<div class="cover" style="background-image: url(<?= $userPhoto; ?>)"></div>
-						<p class="icon-user">USUÁRIO</p>
+	<form action="<?= url('/admin/usuarios'); ?>" method="post">
+		<div class="form-row">
 
-						<h4><?= $user->fullName(); ?></h4>
-						<div class="info">
-							<p><?= $user->email; ?></p>
-							<p>Desde <?= date_fmt($user->created_at, "d/m/y \à\s H\hi"); ?></p>
+		<div class="form-group col-8 col-md-10">
+			<input type="s" name="s" id="s" value="<?= $search; ?>" class="form-control" placeholder="Buscar Usuários" />
+		</div>
+		<div class="form-group col-4 col-md-2">
+			<button type="submit" class="btn btn-primary w-100">Buscar</button>
+		</div>
+		</div>
+	</form>
+
+	<?php if ($users): ?>
+		<div class="row row-cols-1 row-cols-md-3">
+			<?php foreach ($users as $user):
+				$userPhoto = ($user->photo() ? image($user->photo, 300, 300) : theme("/assets/images/avatar.jpg", CONF_VIEW_ADMIN));
+				?>
+				<div class="col mb-4">
+					<div class="card h-100">
+						<img src="<?= $userPhoto; ?>" class="card-img-top img-fluid" alt="<?= $user->name; ?>">
+						<div class="card-body">
+							<h5 class="card-title"><?= $user->name; ?></h5>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item px-0">
+									<span class="font-weight-bold">Nome:</span>
+									<span><?= $user->name; ?></span>
+								</li>
+								<li class="list-group-item px-0">
+									<span class="font-weight-bold">E-mail:</span>
+									<span><?= $user->email; ?></span>
+								</li>
+							</ul>
 						</div>
 
-						<div class="actions">
-							<a class="icon-cog btn btn-blue" href="<?= url("/admin/users/user/{$user->id}"); ?>"
-									title="">Gerenciar
-							</a>
+						<div class="card-footer">
+							<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+								<a href="<?= url("admin/usuarios/{$user->id}/deletar"); ?>" title="Excluir" class="btn btn-danger">Excluir</a>
+								<a href="<?= url("admin/usuarios/{$user->id}"); ?>" title="Editar" class="btn btn-primary">Editar</a>
+							</div>
 						</div>
-					</article>
-				<?php endforeach; ?>
-			</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
 
+		<div class="text-center">
 			<?= $paginator; ?>
-		</section>
-	</div>
-</section>
+		</div>
+	<?php else: ?>
+		<div class="alert alert-warning" role="alert">
+			Nenhum usuário encontrado
+		</div>
+	<?php endif; ?>
+</div>
+
+<script>
+
+	$('.btn-danger').on('click', function (e) {
+		if (!confirm('Tem certeza que quer excluir o usuário?')) {
+			e.preventDefault();
+		}
+	});
+</script>
