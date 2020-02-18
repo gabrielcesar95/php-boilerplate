@@ -86,7 +86,7 @@ class Users extends Admin
 	{
 		if (isset($data) && $data) {
 			$data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
-			
+
 			$userCreate = new User();
 			$userCreate->name = $data["name"];
 			$userCreate->email = $data["email"];
@@ -114,39 +114,53 @@ class Users extends Admin
 				return;
 			}
 
-			$this->message->success("Usuário cadastrado com sucesso...")->flash();
+			$this->message->success("Usuário cadastrado com sucesso!")->flash();
 			$json["redirect"] = url("/admin/usuarios");
 
 			echo json_encode($json);
-			return;
 		}
+		return;
 	}
 
-	/**
-	 * @param array|null $data
-	 * @throws \Exception
-	 */
-	public function user(?array $data): void
+	public function edit(?array $data): void
 	{
-		//update
-		if (!empty($data["action"]) && $data["action"] == "update") {
+		$userEdit = null;
+		if (!empty($data["user_id"])) {
+			$userId = filter_var($data["user_id"], FILTER_VALIDATE_INT);
+			$userEdit = (new User())->findById($userId);
+		}
+
+		$head = $this->seo->render(
+			CONF_SITE_NAME . " | {$userEdit->name}",
+			CONF_SITE_DESC,
+			url("/admin"),
+			url("/admin/assets/images/image.jpg"),
+			false
+		);
+
+		echo $this->view->render("users/form", [
+			"app" => "users/form",
+			"head" => $head,
+			"user" => $userEdit
+		]);
+	}
+
+	public function update(?array $data): void
+	{
+		if (isset($data) && $data) {
 			$data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
-			$userUpdate = (new User())->findById($data["user_id"]);
+			$userUpdate = (new User())->findById((int)$data["user_id"]);
 
 			if (!$userUpdate) {
 				$this->message->error("Você tentou gerenciar um usuário que não existe")->flash();
-				echo json_encode(["redirect" => url("/admin/usuarios/home")]);
+				echo json_encode(["redirect" => url("/admin/usuarios")]);
 				return;
 			}
 
-			$userUpdate->first_name = $data["first_name"];
-			$userUpdate->last_name = $data["last_name"];
+			$userUpdate->name = $data["name"];
 			$userUpdate->email = $data["email"];
 			$userUpdate->password = (!empty($data["password"]) ? $data["password"] : $userUpdate->password);
-			$userUpdate->genre = $data["genre"];
-			$userUpdate->datebirth = date_fmt_back($data["datebirth"]);
-			$userUpdate->document = preg_replace("/[^0-9]/", "", $data["document"]);
-			$userUpdate->status = $data["status"];
+			$userUpdate->birth_date = date_fmt_back($data["birth_date"]);
 
 			//upload photo
 			if (!empty($_FILES["photo"])) {
@@ -174,10 +188,21 @@ class Users extends Admin
 				return;
 			}
 
-			$this->message->success("Usuário atualizado com sucesso...")->flash();
-			echo json_encode(["reload" => true]);
-			return;
+			$this->message->success("Usuário atualizado com sucesso!")->flash();
+			$json["redirect"] = url("/admin/usuarios");
+			echo json_encode($json);
 		}
+		return;
+	}
+
+	/**
+	 * @param array|null $data
+	 * @throws \Exception
+	 */
+	public function user(?array $data): void
+	{
+		//TODO: User delete
+		//TODO: User address
 
 		//delete
 		if (!empty($data["action"]) && $data["action"] == "delete") {
@@ -197,7 +222,7 @@ class Users extends Admin
 
 			$userDelete->destroy();
 
-			$this->message->success("O usuário foi excluído com sucesso...")->flash();
+			$this->message->success("O usuário foi excluído com sucesso!")->flash();
 			echo json_encode(["redirect" => url("/admin/usuarios/home")]);
 
 			return;
