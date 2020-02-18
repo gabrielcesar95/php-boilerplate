@@ -2,97 +2,9 @@
 
 $(function () {
     var ajaxResponseBaseTime = 3;
-    var ajaxResponseRequestError = "<div class='message error icon-warning'>Desculpe mas não foi possível processar sua requisição...</div>";
-
-    // MOBILE MENU
-
-    $(".mobile_menu").click(function (e) {
-        e.preventDefault();
-
-        var menu = $(".dash_sidebar");
-        menu.animate({right: 0}, 200, function (e) {
-            $("body").css("overflow", "hidden");
-        });
-
-        menu.one("mouseleave", function () {
-            $(this).animate({right: '-260'}, 200, function (e) {
-                $("body").css("overflow", "auto");
-            });
-        });
-    });
-
-    //NOTIFICATION CENTER
-
-    function notificationsCount() {
-        var center = $(".notification_center_open");
-        $.post(center.data("count"), function (response) {
-            if (response.count) {
-                center.html(response.count);
-            } else {
-                center.html("0");
-            }
-        }, "json");
-    }
-
-    function notificationHtml(link, image, notify, date) {
-        return '<div data-notificationlink="' + link + '" class="notification_center_item radius transition">\n' +
-            '    <div class="image">\n' +
-            '        <img class="rounded" src="' + image + '"/>\n' +
-            '    </div>\n' +
-            '    <div class="info">\n' +
-            '        <p class="title">' + notify + '</p>\n' +
-            '        <p class="time icon-clock-o">' + date + '</p>\n' +
-            '    </div>\n' +
-            '</div>';
-    }
-
-    notificationsCount();
-
-    setInterval(function () {
-        notificationsCount();
-    }, 1000 * 50);
-
-    $(".notification_center_open").click(function (e) {
-        e.preventDefault();
-
-        var notify = $(this).data("notify");
-        var center = $(".notification_center");
-
-        $.post(notify, function (response) {
-            if (response.message) {
-                ajaxMessage(response.message, ajaxResponseBaseTime);
-            }
-
-            var centerHtml = "";
-            if (response.notifications) {
-                $.each(response.notifications, function (e, notify) {
-                    centerHtml += notificationHtml(notify.link, notify.image, notify.title, notify.created_at);
-                });
-
-                center.html(centerHtml);
-
-                center.css("display", "block").animate({right: 0}, 200, function (e) {
-                    $("body").css("overflow", "hidden");
-                });
-            }
-        }, "json");
-
-        center.one("mouseleave", function () {
-            $(this).animate({right: '-320'}, 200, function (e) {
-                $("body").css("overflow", "auto");
-                $(this).css("display", "none");
-            });
-        });
-
-        notificationsCount();
-    });
-
-    $(".notification_center").on("click", "[data-notificationlink]", function () {
-        window.location.href = $(this).data("notificationlink");
-    });
+    var ajaxResponseRequestError = "<div class='message error icon-warning'>Não foi possível processar sua requisição...</div>";
 
     //DATA SET
-
     $("[data-post]").click(function (e) {
         e.preventDefault();
 
@@ -150,10 +62,6 @@ $(function () {
         var form = $(this);
         var load = $(".ajax_load");
 
-        if (typeof tinyMCE !== 'undefined') {
-            tinyMCE.triggerSave();
-        }
-
         form.ajaxSubmit({
             url: form.attr("action"),
             type: "POST",
@@ -190,12 +98,6 @@ $(function () {
                 if (response.message) {
                     ajaxMessage(response.message, ajaxResponseBaseTime);
                 }
-
-                //image by fsphp mce upload
-                if (response.mce_image) {
-                    $('.mce_upload').fadeOut(200);
-                    tinyMCE.activeEditor.insertContent(response.mce_image);
-                }
             },
             complete: function () {
                 if (form.data("reset") === true) {
@@ -224,18 +126,16 @@ $(function () {
     }
 
     // AJAX RESPONSE MONITOR
-
     $(".ajax_response .message").each(function (e, m) {
         ajaxMessage(m, ajaxResponseBaseTime += 1);
     });
 
     // AJAX MESSAGE CLOSE ON CLICK
-
     $(".ajax_response").on("click", ".message", function (e) {
         $(this).effect("bounce").fadeOut(1);
     });
 
-    // MAKS
+    // MASKS
 
     $(".mask-date").mask('00/00/0000');
     $(".mask-datetime").mask('00/00/0000 00:00');
@@ -245,63 +145,25 @@ $(function () {
     $(".mask-money").mask('000.000.000.000.000,00', {reverse: true, placeholder: "0,00"});
 });
 
-// TINYMCE INIT
-
-tinyMCE.init({
-    selector: "textarea.mce",
-    language: 'pt_BR',
-    menubar: false,
-    theme: "modern",
-    height: 132,
-    skin: 'light',
-    entity_encoding: "raw",
-    theme_advanced_resizing: true,
-    plugins: [
-        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-        "save table contextmenu directionality emoticons template paste textcolor media"
-    ],
-    toolbar: "styleselect | pastetext | removeformat |  bold | italic | underline | strikethrough | bullist | numlist | alignleft | aligncenter | alignright |  link | unlink | fsphpimage | code | fullscreen",
-    style_formats: [
-        {title: 'Normal', block: 'p'},
-        {title: 'Titulo 3', block: 'h3'},
-        {title: 'Titulo 4', block: 'h4'},
-        {title: 'Titulo 5', block: 'h5'},
-        {title: 'Código', block: 'pre', classes: 'brush: php;'}
-    ],
-    link_class_list: [
-        {title: 'None', value: ''},
-        {title: 'Blue CTA', value: 'btn btn_cta_blue'},
-        {title: 'Green CTA', value: 'btn btn_cta_green'},
-        {title: 'Yellow CTA', value: 'btn btn_cta_yellow'},
-        {title: 'Red CTA', value: 'btn btn_cta_red'}
-    ],
-    setup: function (editor) {
-        editor.addButton('fsphpimage', {
-            title: 'Enviar Imagem',
-            icon: 'image',
-            onclick: function () {
-                $('.mce_upload').fadeIn(200, function (e) {
-                    $("body").click(function (e) {
-                        if ($(e.target).attr("class") === "mce_upload") {
-                            $('.mce_upload').fadeOut(200);
-                        }
-                    });
-                }).css("display", "flex");
-            }
-        });
-    },
-    link_title: false,
-    target_list: false,
-    theme_advanced_blockformats: "h1,h2,h3,h4,h5,p,pre",
-    media_dimensions: false,
-    media_poster: false,
-    media_alt_source: false,
-    media_embed: false,
-    extended_valid_elements: "a[href|target=_blank|rel|class]",
-    imagemanager_insert_template: '<img src="{$url}" title="{$title}" alt="{$title}" />',
-    image_dimensions: false,
-    relative_urls: false,
-    remove_script_host: false,
-    paste_as_text: true
-});
+/*!
+    * Start Bootstrap - SB Admin v6.0.0 (https://startbootstrap.com/templates/sb-admin)
+    * Copyright 2013-2020 Start Bootstrap
+    * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE)
+    */
+(function($) {
+    "use strict";
+    
+    // Add active state to sidbar nav links
+    var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
+    $("#layoutSidenav_nav .sb-sidenav a.nav-link").each(function() {
+        if (this.href === path) {
+            $(this).addClass("active");
+        }
+    });
+    
+    // Toggle the side navigation
+    $("#sidebarToggle").on("click", function(e) {
+        e.preventDefault();
+        $("body").toggleClass("sb-sidenav-toggled");
+    });
+})(jQuery);
