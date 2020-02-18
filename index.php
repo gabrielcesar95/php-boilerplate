@@ -4,8 +4,6 @@ ob_start();
 require __DIR__ . "/vendor/autoload.php";
 
 
-//session_start();session_destroy();die;
-
 /**
  * BOOTSTRAP
  */
@@ -45,8 +43,7 @@ $route->get("/entrar", "Login:login");
 $route->post("/entrar", "Login:login");
 
 //dash
-$route->get("/dash", "Dash:dash");
-$route->get("/dash/home", "Dash:home");
+$route->get("/dash", "Dash:home");
 $route->post("/dash/home", "Dash:home");
 $route->get("/logoff", "Dash:logoff");
 

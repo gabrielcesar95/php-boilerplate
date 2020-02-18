@@ -6,7 +6,7 @@
 
     <?= $head; ?>
 
-    <link rel="stylesheet" href="<?= url("/shared/styles/boot.css"); ?>"/>
+    <link rel="stylesheet" href="<?= url("/shared/styles/bootstrap.css"); ?>"/>
     <link rel="stylesheet" href="<?= url("/shared/styles/styles.css"); ?>"/>
     <link rel="stylesheet" href="<?= theme("/assets/css/style.css", CONF_VIEW_ADMIN); ?>"/>
 
@@ -32,7 +32,7 @@
             ?>
             <div><img class="dash_sidebar_user_thumb" src="<?= $userPhoto; ?>" alt="" title=""/></div>
             <h3 class="dash_sidebar_user_name">
-                <a href="<?= url("/admin/users/user/" . user()->id); ?>"><?= user()->fullName(); ?></a>
+                <a href="<?= url("/admin/users/user/" . user()->id); ?>"><?= user()->name; ?></a>
             </h3>
         </article>
 
