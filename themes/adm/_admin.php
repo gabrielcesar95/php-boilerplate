@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<?= url("/shared/styles/styles.css"); ?>"/>
     <link rel="stylesheet" href="<?= theme("/assets/css/style.css", CONF_VIEW_ADMIN); ?>"/>
 
-    <link rel="icon" type="image/png" href="<?= theme("/assets/images/favicon.png", CONF_VIEW_ADMIN); ?>"/>
+    <link rel="icon" type="image/png" href="<?= theme("/assets/images/favicon.ico", CONF_VIEW_ADMIN); ?>"/>
 </head>
 <body>
 

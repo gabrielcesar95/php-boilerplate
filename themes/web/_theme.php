@@ -12,7 +12,7 @@ use Source\Models\Auth;
 
 	<?= $head; ?>
 
-	<link rel="icon" type="image/png" href="<?= theme("/assets/images/favicon.png"); ?>" />
+	<link rel="icon" type="image/png" href="<?= theme("/assets/images/favicon.ico"); ?>" />
 	<link rel="stylesheet" href="<?= theme("/assets/style.css"); ?>" />
 
 	<style>
