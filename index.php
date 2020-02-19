@@ -51,8 +51,8 @@ $route->post("/usuarios", "Users:home");
 $route->get("/usuarios/{search}/{page}", "Users:home");
 $route->get("/usuarios/novo", "Users:create");
 $route->post("/usuarios/novo", "Users:store");
-$route->get("/usuarios/{user_id}", "Users:edit");
-$route->put("/usuarios/{user_id}", "Users:update");
+$route->get("/usuarios/editar/{user_id}", "Users:edit");
+$route->put("/usuarios/editar/{user_id}", "Users:update");
 $route->get("/usuarios/deletar/{user_id}", "Users:delete");
 
 //END ADMIN

@@ -6,6 +6,8 @@ use Source\Core\Model;
 
 class User extends Model
 {
+	public $address;
+
 	/**
 	 * User constructor.
 	 */
@@ -18,7 +20,6 @@ class User extends Model
 	 * @param string $name
 	 * @param string $email
 	 * @param string $password
-	 * @param string|null $document
 	 * @return User
 	 */
 	public function bootstrap(
@@ -30,6 +31,17 @@ class User extends Model
 		$this->email = $email;
 		$this->password = $password;
 		return $this;
+	}
+
+	/**
+	 * @return Address|null
+	 */
+	public function address(): ?Address
+	{
+		if ($this->address_id) {
+			return (new Address())->findById($this->address_id);
+		}
+		return null;
 	}
 
 	/**

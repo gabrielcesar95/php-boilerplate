@@ -2,6 +2,7 @@
 
 namespace Source\App\Admin;
 
+use Source\Models\Address;
 use Source\Models\User;
 use Source\Support\Pager;
 use Source\Support\Thumb;
@@ -108,10 +109,26 @@ class Users extends Admin
 				$userCreate->photo = $image;
 			}
 
+			if (isset($data['address']) && $data['address']) {
+				$addressCreate = new Address();
+				$addressCreate->zip_code = $data['address']['zip_code'];
+				$addressCreate->address = $data['address']['address'];
+				$addressCreate->state = $data['address']['state'];
+				$addressCreate->city = $data['address']['city'];
+				$addressCreate->area = $data['address']['area'];
+				$addressCreate->number = $data['address']['number'] ?? null;
+				$addressCreate->details = $data['address']['details'] ?? null;
+			}
+
 			if (!$userCreate->save()) {
 				$json["message"] = $userCreate->message()->render();
 				echo json_encode($json);
 				return;
+			}
+
+			if ($addressCreate->save()) {
+				$userCreate->address_id = $addressCreate->id;
+				$userCreate->save();
 			}
 
 			$this->message->success("Usuário cadastrado com sucesso!")->flash();
@@ -182,10 +199,26 @@ class Users extends Admin
 				$userUpdate->photo = $image;
 			}
 
+			if (isset($data['address']) && $data['address']) {
+				$addressUpdate = $userUpdate->address_id ? (new Address())->findById($userUpdate->address_id) : new Address();
+				$addressUpdate->zip_code = $data['address']['zip_code'];
+				$addressUpdate->address = $data['address']['address'];
+				$addressUpdate->state = $data['address']['state'];
+				$addressUpdate->city = $data['address']['city'];
+				$addressUpdate->area = $data['address']['area'];
+				$addressUpdate->number = $data['address']['number'] ?? null;
+				$addressUpdate->details = $data['address']['details'] ?? null;
+			}
+
 			if (!$userUpdate->save()) {
 				$json["message"] = $userUpdate->message()->render();
 				echo json_encode($json);
 				return;
+			}
+
+			if ($addressUpdate->save()) {
+				$userUpdate->address_id = $addressUpdate->id;
+				$userUpdate->save();
 			}
 
 			$this->message->success("Usuário atualizado com sucesso!")->flash();
