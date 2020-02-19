@@ -39,7 +39,7 @@
 
 						<div class="card-footer">
 							<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-								<a href="<?= url("admin/usuarios/{$user->id}/deletar"); ?>" title="Excluir" class="btn btn-danger">Excluir</a>
+								<a href="<?= url("admin/usuarios/deletar/{$user->id}"); ?>" title="Excluir" class="btn btn-danger">Excluir</a>
 								<a href="<?= url("admin/usuarios/{$user->id}"); ?>" title="Editar" class="btn btn-primary">Editar</a>
 							</div>
 						</div>

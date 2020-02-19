@@ -195,24 +195,15 @@ class Users extends Admin
 		return;
 	}
 
-	/**
-	 * @param array|null $data
-	 * @throws \Exception
-	 */
-	public function user(?array $data): void
+	public function delete(?array $data): void
 	{
-		//TODO: User delete
-		//TODO: User address
-
-		//delete
-		if (!empty($data["action"]) && $data["action"] == "delete") {
+		if (isset($data['user_id']) && $data['user_id']) {
 			$data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
 			$userDelete = (new User())->findById($data["user_id"]);
 
 			if (!$userDelete) {
-				$this->message->error("Você tentnou deletar um usuário que não existe")->flash();
-				echo json_encode(["redirect" => url("/admin/usuarios/home")]);
-				return;
+				$this->message->error("Você tentou deletar um usuário que não existe")->flash();
+				redirect('admin/usuarios');
 			}
 
 			if ($userDelete->photo && file_exists(__DIR__ . "/../../../" . CONF_UPLOAD_DIR . "/{$userDelete->photo}")) {
@@ -223,10 +214,18 @@ class Users extends Admin
 			$userDelete->destroy();
 
 			$this->message->success("O usuário foi excluído com sucesso!")->flash();
-			echo json_encode(["redirect" => url("/admin/usuarios/home")]);
-
-			return;
 		}
+		redirect('admin/usuarios');
+		return;
+	}
+
+	/**
+	 * @param array|null $data
+	 * @throws \Exception
+	 */
+	public function user(?array $data): void
+	{
+		//TODO: User address
 
 		$userEdit = null;
 		if (!empty($data["user_id"])) {
