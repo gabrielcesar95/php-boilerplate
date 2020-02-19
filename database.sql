@@ -21,8 +21,9 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	`zip_code` varchar(9) NOT NULL,
 	`address` varchar(255) NOT NULL,
-	`area` varchar(128) NOT NULL,
+	`state` varchar(2) NOT NULL,
 	`city` varchar(128) NOT NULL,
+	`area` varchar(128) NOT NULL,
 	`number` varchar(255) DEFAULT NULL,
 	`details` varchar(255) DEFAULT NULL,
 	`created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -30,8 +31,10 @@ CREATE TABLE IF NOT EXISTS `addresses` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela php_boilerplate.addresses: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela php_boilerplate.addresses: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+INSERT INTO `addresses` (`id`, `zip_code`, `address`, `state`, `city`, `area`, `number`, `details`, `created_at`, `updated_at`) VALUES
+(1, '13415-040', 'Rua Sérgio Juvenal M. Antunes', 'SP', 'Piracicaba', 'Monte Alegre', '80', '', '2020-02-19 10:51:19', '2020-02-19 13:56:59');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela php_boilerplate.users
@@ -50,12 +53,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 	KEY `FK_users_addresses` (`address_id`),
 	FULLTEXT KEY `full_text` (`name`,`email`),
 	CONSTRAINT `FK_users_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela php_boilerplate.users: ~1 rows (aproximadamente)
+-- Copiando dados para a tabela php_boilerplate.users: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `address_id`, `name`, `email`, `password`, `birth_date`, `photo`, `created_at`, `updated_at`) VALUES
-(1, NULL, 'Gabriel Cesar Mello', '95gabrielcesar@gmail.com', '$2y$10$KPYZC5axLBDrHM.L5a1WqeaH17IVt0GiE5ubqhMg3ROvm0RWYnTki', NULL, NULL, '2020-02-19 08:27:04', '2020-02-19 08:35:07');
+(1, 1, 'Gabriel Cesar Mello', '95gabrielcesar@gmail.com', '$2y$10$jqEoCqRKm2sKeKx2rhMQ4eUp3Me0tOVageWFi7RRr.yLP8to4uAUy', '1995-03-02', NULL, '2020-02-19 10:50:21', '2020-02-19 13:57:22');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
