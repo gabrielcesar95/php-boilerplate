@@ -2,6 +2,7 @@
 
 namespace Source\App\Admin;
 
+use Source\Core\Connect;
 use Source\Models\Auth;
 use Source\Models\User;
 
@@ -25,27 +26,7 @@ class Dash extends Admin
 	 */
 	public function home(?array $data): void
 	{
-		//real time access
-		if (!empty($data["refresh"])) {
-			$list = null;
-			$items = (new Online())->findByActive();
-			if ($items) {
-				foreach ($items as $item) {
-					$list[] = [
-						"dates" => date_fmt($item->created_at, "H\hi") . " - " . date_fmt($item->updated_at, "H\hi"),
-						"user" => ($item->user ? $item->user()->name : "Guest User"),
-						"pages" => $item->pages,
-						"url" => $item->url
-					];
-				}
-			}
-
-			echo json_encode([
-				"count" => (new Online())->findByActive(true),
-				"list" => $list
-			]);
-			return;
-		}
+		$new_users = $this->new_users();
 
 		$head = $this->seo->render(
 			CONF_SITE_NAME . " | Dashboard",
@@ -57,8 +38,24 @@ class Dash extends Admin
 
 		echo $this->view->render("dashboard/home", [
 			"app" => "dash",
-			"head" => $head
+			"head" => $head,
+			"new_users" => $new_users
 		]);
+	}
+
+	public function new_users(): array
+	{
+		$run = Connect::getInstance();
+
+		$query = "SELECT name, email, DATE_FORMAT(created_at, '%d/%m/%Y ás %H:%i:%s') AS created_at FROM users ORDER BY created_at DESC LIMIT 5;";
+
+		$stmt = $run->prepare($query);
+		$stmt->execute();
+
+		if ($stmt->rowCount()) {
+			return $stmt->fetchAll();
+		}
+		return [];
 	}
 
 	/**

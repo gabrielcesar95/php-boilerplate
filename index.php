@@ -42,7 +42,6 @@ $route->post("/entrar", "Login:login");
 
 //dash
 $route->get("/dash", "Dash:home");
-$route->post("/dash/home", "Dash:home");
 $route->get("/logoff", "Dash:logoff");
 
 //users
